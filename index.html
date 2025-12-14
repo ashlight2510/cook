@@ -167,6 +167,23 @@
             </div>
             <p id="comment" class="text-slate-700 mt-3 leading-relaxed"></p>
           </div>
+          <div
+            id="image-wrapper"
+            class="w-full md:w-72 aspect-[4/3] rounded-2xl overflow-hidden border border-slate-100 shadow-inner bg-slate-100 flex items-center justify-center relative"
+          >
+            <img
+              id="food-image"
+              class="w-full h-full object-cover hidden"
+              alt=""
+              loading="lazy"
+            />
+            <div
+              id="image-status"
+              class="absolute inset-0 flex items-center justify-center text-sm text-slate-500"
+            >
+              이미지 준비 중...
+            </div>
+          </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 mt-6">
@@ -285,10 +302,11 @@
         },
       ];
 
-      const recipes = [
+      const baseRecipes = [
         {
           id: "pork-stir-fry",
           name: "제육볶음",
+          baseName: "제육볶음",
           hunger: "big",
           mood: ["stress", "happy"],
           situation: ["solo", "together"],
@@ -316,6 +334,7 @@
         {
           id: "kimchi-stew",
           name: "김치찌개",
+          baseName: "김치찌개",
           hunger: "big",
           mood: ["meh", "stress"],
           situation: ["solo", "together"],
@@ -342,6 +361,7 @@
         {
           id: "mala-tang",
           name: "마라탕 (배달 각)",
+          baseName: "마라탕",
           hunger: "big",
           mood: ["stress"],
           situation: ["delivery", "together"],
@@ -367,6 +387,7 @@
         {
           id: "pasta-cream",
           name: "버섯 크림 파스타",
+          baseName: "버섯 크림 파스타",
           hunger: "mid",
           mood: ["happy", "meh"],
           situation: ["together", "solo"],
@@ -394,6 +415,7 @@
         {
           id: "bibim-noodle",
           name: "비빔국수",
+          baseName: "비빔국수",
           hunger: "light",
           mood: ["happy", "meh"],
           situation: ["solo", "together"],
@@ -418,6 +440,7 @@
         {
           id: "salmon-poke",
           name: "연어 포케",
+          baseName: "연어 포케",
           hunger: "mid",
           mood: ["happy"],
           situation: ["together", "delivery"],
@@ -442,6 +465,7 @@
         {
           id: "kimchi-fried-rice",
           name: "김치볶음밥",
+          baseName: "김치볶음밥",
           hunger: "mid",
           mood: ["stress", "meh"],
           situation: ["solo", "delivery"],
@@ -466,6 +490,7 @@
         {
           id: "avocado-toast",
           name: "아보카도 토스트",
+          baseName: "아보카도 토스트",
           hunger: "light",
           mood: ["happy"],
           situation: ["solo"],
@@ -489,6 +514,7 @@
         {
           id: "taco-night",
           name: "쉬운 타코 나이트",
+          baseName: "타코",
           hunger: "big",
           mood: ["happy", "meh"],
           situation: ["together"],
@@ -513,6 +539,7 @@
         {
           id: "tofu-kimchi",
           name: "두부김치",
+          baseName: "두부김치",
           hunger: "mid",
           mood: ["stress", "meh"],
           situation: ["solo", "together"],
@@ -536,6 +563,7 @@
         {
           id: "chicken-salad",
           name: "훈제치킨 샐러드",
+          baseName: "훈제치킨 샐러드",
           hunger: "light",
           mood: ["meh", "happy"],
           situation: ["delivery", "solo"],
@@ -558,6 +586,888 @@
         },
       ];
 
+      const cookJsonEmbedded = [
+        {
+          id: "jeyuk-bokkeum",
+          name: "제육볶음",
+          time: 25,
+          difficulty: "중",
+          tags: ["매콤", "볶음", "집밥"],
+          ingredients: [
+            "돼지고기 앞다리살 300g",
+            "양파 1/2개",
+            "대파 1대",
+            "고추장 2큰술",
+            "고춧가루 1큰술",
+            "간장 1큰술",
+            "마늘 1큰술",
+          ],
+          steps: [
+            "돼지고기를 먹기 좋은 크기로 자른다.",
+            "고추장, 고춧가루, 간장, 마늘을 섞어 양념장을 만든다.",
+            "고기에 양념을 넣고 10분간 재운다.",
+            "센 불에서 고기를 먼저 볶는다.",
+            "양파와 대파를 넣고 타지 않게 볶아 마무리한다.",
+          ],
+          description: "매콤한 양념으로 밥 한 공기 바로 사라지는 대표 집밥.",
+        },
+        {
+          id: "kimchi-jjigae",
+          name: "김치찌개",
+          time: 30,
+          difficulty: "하",
+          tags: ["국물", "집밥"],
+          ingredients: [
+            "신김치 1컵",
+            "돼지고기 150g",
+            "두부 1/2모",
+            "고춧가루 1큰술",
+            "된장 1/2큰술",
+          ],
+          steps: [
+            "냄비에 김치와 돼지고기를 넣고 중불에서 볶는다.",
+            "물과 고춧가루, 된장을 넣고 끓인다.",
+            "두부를 넣고 5분 더 끓여 완성한다.",
+          ],
+          description: "실패 없는 국민 찌개.",
+        },
+        {
+          id: "kimchi-fried-rice",
+          name: "김치볶음밥",
+          time: 15,
+          difficulty: "하",
+          tags: ["한그릇", "간단", "집밥"],
+          ingredients: ["밥 1공기", "김치 1/2컵", "대파", "간장 1큰술"],
+          steps: [
+            "팬에 기름을 두르고 대파를 볶아 파기름을 낸다.",
+            "김치를 넣고 볶는다.",
+            "밥과 간장을 넣고 고슬하게 볶아 완성한다.",
+          ],
+          description: "냉장고 털이 최강자.",
+        },
+        {
+          id: "bibim-guksu",
+          name: "비빔국수",
+          time: 12,
+          difficulty: "하",
+          tags: ["새콤달콤", "한그릇"],
+          ingredients: ["소면", "고추장", "식초", "설탕", "오이"],
+          steps: [
+            "소면을 삶아 찬물에 헹군다.",
+            "고추장, 식초, 설탕을 섞어 양념장을 만든다.",
+            "면과 양념을 버무리고 오이를 올린다.",
+          ],
+          description: "입맛 없을 때 빠른 해결책.",
+        },
+        {
+          id: "doenjang-jjigae",
+          name: "된장찌개",
+          time: 25,
+          difficulty: "하",
+          tags: ["국물", "담백", "집밥"],
+          ingredients: ["된장", "두부", "애호박", "양파"],
+          steps: [
+            "물에 된장을 풀어 끓인다.",
+            "채소를 넣고 중불에서 끓인다.",
+            "두부를 넣고 5분 더 끓인다.",
+          ],
+          description: "매일 먹어도 질리지 않는 기본 찌개.",
+        },
+        {
+          id: "gyeran-mari",
+          name: "계란말이",
+          time: 10,
+          difficulty: "하",
+          tags: ["반찬", "간단"],
+          ingredients: ["계란 3개", "소금 약간", "식용유"],
+          steps: [
+            "계란을 풀고 소금으로 간을 한다.",
+            "팬에 기름을 두르고 약불로 달군다.",
+            "계란물을 조금씩 부어 여러 번 말아 익힌다.",
+          ],
+          description: "밥상에 하나 있으면 든든한 기본 반찬.",
+        },
+        {
+          id: "bulgogi",
+          name: "불고기",
+          time: 30,
+          difficulty: "중",
+          tags: ["단짠", "집밥"],
+          ingredients: ["소고기 불고기용 300g", "간장", "설탕", "마늘", "양파"],
+          steps: [
+            "고기에 간장, 설탕, 마늘을 넣어 양념한다.",
+            "10분 정도 재운다.",
+            "팬에 중불로 볶아 완전히 익힌다.",
+          ],
+          description: "남녀노소 누구나 좋아하는 단짠 메뉴.",
+        },
+        {
+          id: "dak-bokkeumtang",
+          name: "닭볶음탕",
+          time: 45,
+          difficulty: "중",
+          tags: ["매콤", "국물", "푸짐"],
+          ingredients: ["닭 한 마리", "감자", "고추장", "고춧가루", "마늘"],
+          steps: [
+            "닭을 데쳐 불순물을 제거한다.",
+            "양념과 물을 넣고 끓인다.",
+            "감자를 넣고 중불에서 30분 끓인다.",
+          ],
+          description: "국물까지 맛있는 든든한 한 끼.",
+        },
+        {
+          id: "jeyuk-deopbap",
+          name: "제육덮밥",
+          time: 20,
+          difficulty: "하",
+          tags: ["한그릇", "매콤"],
+          ingredients: ["돼지고기", "밥", "고추장", "양파"],
+          steps: ["돼지고기를 양념해 볶는다.", "밥 위에 고기를 올린다."],
+          description: "혼밥에 최적화된 메뉴.",
+        },
+        {
+          id: "tuna-mayo-bowl",
+          name: "참치마요 덮밥",
+          time: 8,
+          difficulty: "하",
+          tags: ["초간단", "한그릇"],
+          ingredients: ["참치캔", "마요네즈", "밥"],
+          steps: ["참치의 기름을 제거한다.", "마요네즈와 섞는다.", "밥 위에 올린다."],
+          description: "요리하기 싫은 날의 정답.",
+        },
+        {
+          id: "sundubu-jjigae",
+          name: "순두부찌개",
+          time: 20,
+          difficulty: "하",
+          tags: ["국물", "얼큰"],
+          ingredients: ["순두부", "고춧가루", "계란"],
+          steps: [
+            "고춧가루를 기름에 볶아 향을 낸다.",
+            "물과 순두부를 넣고 끓인다.",
+            "계란을 풀어 마무리한다.",
+          ],
+          description: "부드럽고 얼큰한 국물 요리.",
+        },
+        {
+          id: "tteokbokki",
+          name: "떡볶이",
+          time: 20,
+          difficulty: "하",
+          tags: ["분식", "매콤"],
+          ingredients: ["떡", "고추장", "어묵"],
+          steps: ["물을 끓인다.", "떡과 어묵을 넣어 졸인다."],
+          description: "언제 먹어도 반가운 분식 메뉴.",
+        },
+        {
+          id: "omurice",
+          name: "오므라이스",
+          time: 25,
+          difficulty: "중",
+          tags: ["양식", "한그릇"],
+          ingredients: ["밥", "계란", "케첩"],
+          steps: ["케첩볶음밥을 만든다.", "계란으로 덮어 완성한다."],
+          description: "집에서 만들어도 만족도 높은 메뉴.",
+        },
+        {
+          id: "aglio-e-olio",
+          name: "알리오올리오",
+          time: 15,
+          difficulty: "하",
+          tags: ["양식", "간단"],
+          ingredients: ["파스타면", "마늘", "올리브유"],
+          steps: ["면을 삶는다.", "마늘을 볶아 오일을 만든다.", "면을 넣어 섞는다."],
+          description: "재료 적고 실패 없는 파스타.",
+        },
+        {
+          id: "curry-rice",
+          name: "카레라이스",
+          time: 30,
+          difficulty: "하",
+          tags: ["집밥", "든든"],
+          ingredients: ["카레", "밥", "감자", "양파"],
+          steps: ["채소를 볶는다.", "물과 카레를 넣어 끓인다."],
+          description: "대량 조리 가능한 안정 카드.",
+        },
+        {
+          id: "ramen",
+          name: "라면",
+          time: 7,
+          difficulty: "하",
+          tags: ["야식", "국물"],
+          ingredients: ["라면 1봉"],
+          steps: ["물을 끓인다.", "면과 스프를 넣는다."],
+          description: "설명 필요 없는 메뉴.",
+        },
+        {
+          id: "chicken-salad-json",
+          name: "치킨샐러드",
+          time: 10,
+          difficulty: "하",
+          tags: ["식단", "단백질"],
+          ingredients: ["닭가슴살", "채소"],
+          steps: ["닭을 찢는다.", "채소와 섞는다."],
+          description: "가볍게 먹고 싶은 날의 선택.",
+        },
+        {
+          id: "toast",
+          name: "토스트",
+          time: 8,
+          difficulty: "하",
+          tags: ["브런치", "간단"],
+          ingredients: ["식빵"],
+          steps: ["식빵을 굽는다."],
+          description: "아침에 빠르게 먹기 좋은 메뉴.",
+        },
+        {
+          id: "gyeran-guk",
+          name: "계란국",
+          time: 10,
+          difficulty: "하",
+          tags: ["국물", "담백"],
+          ingredients: ["계란", "국간장"],
+          steps: ["물을 끓인다.", "계란을 풀어 넣는다."],
+          description: "속 편한 국물 요리.",
+        },
+        {
+          id: "samgyeopsal-gui",
+          name: "삼겹살구이",
+          time: 20,
+          difficulty: "하",
+          tags: ["고기", "구이"],
+          ingredients: ["삼겹살 300g", "소금"],
+          steps: [
+            "팬을 센 불로 예열한다.",
+            "삼겹살을 올려 노릇하게 굽는다.",
+            "먹기 좋게 잘라 소금에 찍어 먹는다.",
+          ],
+          description: "말이 필요 없는 대표적인 고기 메뉴.",
+        },
+        {
+          id: "bokkeum-udon",
+          name: "볶음우동",
+          time: 15,
+          difficulty: "중",
+          tags: ["볶음", "한그릇"],
+          ingredients: ["우동면", "채소", "간장"],
+          steps: [
+            "우동면을 끓는 물에 살짝 데친다.",
+            "팬에 기름을 두르고 채소를 볶는다.",
+            "우동면과 간장을 넣어 볶아 완성한다.",
+          ],
+          description: "집에 있는 재료로 충분한 한 그릇.",
+        },
+        {
+          id: "miyeok-guk",
+          name: "미역국",
+          time: 25,
+          difficulty: "하",
+          tags: ["국물", "집밥"],
+          ingredients: ["미역", "국간장", "참기름"],
+          steps: [
+            "불린 미역을 참기름에 볶는다.",
+            "물을 넣고 중불에서 끓인다.",
+            "국간장으로 간을 맞춘다.",
+          ],
+          description: "몸이 피곤할 때 찾게 되는 국.",
+        },
+        {
+          id: "sausage-vegetable-bokkeum",
+          name: "소시지야채볶음",
+          time: 15,
+          difficulty: "하",
+          tags: ["반찬", "간단"],
+          ingredients: ["소시지", "채소", "케첩"],
+          steps: [
+            "소시지와 채소를 썬다.",
+            "팬에 기름을 두르고 볶는다.",
+            "케첩을 넣고 가볍게 섞는다.",
+          ],
+          description: "도시락 반찬으로도 좋은 메뉴.",
+        },
+        {
+          id: "budae-jjigae",
+          name: "부대찌개",
+          time: 35,
+          difficulty: "중",
+          tags: ["국물", "푸짐"],
+          ingredients: ["햄", "김치", "라면사리"],
+          steps: [
+            "냄비에 재료를 보기 좋게 담는다.",
+            "물을 붓고 끓인다.",
+            "라면사리를 넣어 마무리한다.",
+          ],
+          description: "여럿이 먹기 좋은 푸짐한 찌개.",
+        },
+        {
+          id: "gamja-jorim",
+          name: "감자조림",
+          time: 20,
+          difficulty: "하",
+          tags: ["반찬", "달짠"],
+          ingredients: ["감자", "간장", "설탕"],
+          steps: [
+            "감자를 먹기 좋게 썬다.",
+            "물과 양념을 넣고 끓인다.",
+            "중불에서 졸여 윤기를 낸다.",
+          ],
+          description: "밥상에 하나 있으면 든든한 반찬.",
+        },
+        {
+          id: "dak-galbi",
+          name: "닭갈비",
+          time: 35,
+          difficulty: "중",
+          tags: ["매콤", "볶음"],
+          ingredients: ["닭다리살", "양배추", "고추장"],
+          steps: [
+            "닭에 양념을 버무려 재운다.",
+            "팬에 닭을 먼저 볶는다.",
+            "채소를 넣고 중불에서 볶아 완성한다.",
+          ],
+          description: "매콤한 양념이 중독적인 볶음 요리.",
+        },
+        {
+          id: "kongnamul-guk",
+          name: "콩나물국",
+          time: 15,
+          difficulty: "하",
+          tags: ["국물", "해장"],
+          ingredients: ["콩나물", "국간장", "대파"],
+          steps: [
+            "물에 콩나물을 넣고 끓인다.",
+            "뚜껑을 닫고 5분간 끓인다.",
+            "국간장으로 간을 맞춘다.",
+          ],
+          description: "속을 편하게 해주는 가벼운 국.",
+        },
+        {
+          id: "beef-radish-soup",
+          name: "소고기무국",
+          time: 30,
+          difficulty: "중",
+          tags: ["국물", "담백"],
+          ingredients: ["소고기 국거리", "무", "국간장"],
+          steps: [
+            "소고기를 참기름에 볶는다.",
+            "무를 넣고 함께 볶는다.",
+            "물을 붓고 끓여 간을 맞춘다.",
+          ],
+          description: "개운하면서도 깊은 맛의 국.",
+        },
+        {
+          id: "ojingeo-bokkeum",
+          name: "오징어볶음",
+          time: 25,
+          difficulty: "중",
+          tags: ["매콤", "볶음"],
+          ingredients: ["오징어", "양배추", "고추장"],
+          steps: [
+            "오징어를 링 모양으로 자른다.",
+            "양념을 팬에 볶아 향을 낸다.",
+            "오징어와 채소를 넣고 센 불에 볶는다.",
+          ],
+          description: "불맛이 살아 있는 매콤한 볶음.",
+        },
+        {
+          id: "chicken-breast-bokkeum",
+          name: "닭가슴살볶음",
+          time: 15,
+          difficulty: "하",
+          tags: ["단백질", "담백"],
+          ingredients: ["닭가슴살", "양파", "소금"],
+          steps: [
+            "닭가슴살을 한입 크기로 자른다.",
+            "팬에 닭을 먼저 굽는다.",
+            "양파를 넣고 볶아 마무리한다.",
+          ],
+          description: "식단 관리에 좋은 메뉴.",
+        },
+        {
+          id: "ham-egg-fried-rice",
+          name: "햄계란볶음밥",
+          time: 12,
+          difficulty: "하",
+          tags: ["간단", "한그릇"],
+          ingredients: ["밥", "햄", "계란"],
+          steps: [
+            "햄을 볶아 기름을 낸다.",
+            "계란을 넣어 스크램블한다.",
+            "밥을 넣고 고슬하게 볶는다.",
+          ],
+          description: "실패 없는 초간단 볶음밥.",
+        },
+        {
+          id: "tomato-pasta",
+          name: "토마토파스타",
+          time: 20,
+          difficulty: "중",
+          tags: ["양식", "상큼"],
+          ingredients: ["파스타면", "토마토소스", "마늘"],
+          steps: [
+            "면을 소금물에 삶는다.",
+            "마늘을 볶아 향을 낸다.",
+            "소스를 넣고 면과 섞는다.",
+          ],
+          description: "가볍게 먹기 좋은 기본 파스타.",
+        },
+        {
+          id: "gamja-guk",
+          name: "감자국",
+          time: 20,
+          difficulty: "하",
+          tags: ["국물", "담백"],
+          ingredients: ["감자", "국간장"],
+          steps: [
+            "감자를 얇게 썬다.",
+            "물에 넣고 끓인다.",
+            "국간장으로 간을 맞춘다.",
+          ],
+          description: "집밥 느낌 물씬 나는 국.",
+        },
+        {
+          id: "dakjuk",
+          name: "닭죽",
+          time: 40,
+          difficulty: "중",
+          tags: ["부드러움", "회복식"],
+          ingredients: ["닭고기", "쌀"],
+          steps: [
+            "쌀을 불린다.",
+            "닭을 삶아 살을 찢는다.",
+            "쌀과 닭을 넣고 끓여 죽을 만든다.",
+          ],
+          description: "몸이 안 좋을 때 먹기 좋은 메뉴.",
+        },
+        {
+          id: "dubu-jorim",
+          name: "두부조림",
+          time: 20,
+          difficulty: "하",
+          tags: ["반찬", "담백"],
+          ingredients: ["두부 1모", "간장", "고춧가루", "마늘"],
+          steps: [
+            "두부를 먹기 좋게 썬다.",
+            "팬에 두부를 노릇하게 굽는다.",
+            "양념을 넣고 약불에서 졸인다.",
+          ],
+          description: "밥반찬으로 활용도 높은 메뉴.",
+        },
+        {
+          id: "janchi-guksu",
+          name: "잔치국수",
+          time: 20,
+          difficulty: "하",
+          tags: ["국물", "한그릇"],
+          ingredients: ["소면", "국물용 멸치", "대파"],
+          steps: [
+            "멸치로 육수를 낸다.",
+            "소면을 삶아 그릇에 담는다.",
+            "국물을 붓고 대파를 올린다.",
+          ],
+          description: "부담 없이 먹기 좋은 국수.",
+        },
+        {
+          id: "godeungeo-gui",
+          name: "고등어구이",
+          time: 15,
+          difficulty: "하",
+          tags: ["생선", "구이"],
+          ingredients: ["고등어", "소금"],
+          steps: [
+            "고등어에 소금을 살짝 뿌린다.",
+            "팬이나 그릴에 앞뒤로 굽는다.",
+          ],
+          description: "밥도둑 생선 메뉴.",
+        },
+        {
+          id: "curry-udon",
+          name: "카레우동",
+          time: 25,
+          difficulty: "중",
+          tags: ["국물", "퓨전"],
+          ingredients: ["우동면", "카레", "양파"],
+          steps: [
+            "카레를 묽게 끓인다.",
+            "우동면을 데친다.",
+            "그릇에 담아 카레를 붓는다.",
+          ],
+          description: "색다른 한 그릇 메뉴.",
+        },
+        {
+          id: "bacon-fried-rice",
+          name: "베이컨볶음밥",
+          time: 12,
+          difficulty: "하",
+          tags: ["간단", "한그릇"],
+          ingredients: ["밥", "베이컨"],
+          steps: ["베이컨을 볶아 기름을 낸다.", "밥을 넣고 고슬하게 볶는다."],
+          description: "짭짤한 맛이 확실한 메뉴.",
+        },
+        {
+          id: "naeng-guksu",
+          name: "냉국수",
+          time: 15,
+          difficulty: "하",
+          tags: ["시원", "한그릇"],
+          ingredients: ["소면", "냉국물"],
+          steps: ["면을 삶아 찬물에 헹군다.", "그릇에 담고 차가운 국물을 붓는다."],
+          description: "여름에 특히 잘 어울리는 메뉴.",
+        },
+        {
+          id: "chadol-doenjang-jjigae",
+          name: "차돌된장찌개",
+          time: 25,
+          difficulty: "중",
+          tags: ["국물", "고소"],
+          ingredients: ["차돌박이", "된장", "두부", "애호박"],
+          steps: [
+            "차돌박이를 볶아 기름을 낸다.",
+            "물과 된장을 넣고 끓인다.",
+            "채소와 두부를 넣어 마무리한다.",
+          ],
+          description: "고소한 차돌로 깊은 맛을 낸 찌개.",
+        },
+        {
+          id: "ganjang-gyeran-bap",
+          name: "간장계란밥",
+          time: 5,
+          difficulty: "하",
+          tags: ["초간단", "한그릇"],
+          ingredients: ["밥", "계란", "간장", "참기름"],
+          steps: [
+            "계란을 반숙으로 굽는다.",
+            "밥 위에 계란을 올린다.",
+            "간장과 참기름을 두른다.",
+          ],
+          description: "최소한의 재료로 최대의 만족.",
+        },
+        {
+          id: "dakgaejang",
+          name: "닭개장",
+          time: 45,
+          difficulty: "중",
+          tags: ["국물", "매콤"],
+          ingredients: ["닭고기", "고사리", "숙주", "고춧가루"],
+          steps: [
+            "닭을 삶아 살을 찢는다.",
+            "고춧가루를 볶아 기름을 낸다.",
+            "재료와 물을 넣고 끓인다.",
+          ],
+          description: "칼칼하고 얼큰한 국물 요리.",
+        },
+        {
+          id: "eomuk-tang",
+          name: "어묵탕",
+          time: 15,
+          difficulty: "하",
+          tags: ["국물", "간단"],
+          ingredients: ["어묵", "무", "국간장"],
+          steps: [
+            "무를 넣고 물을 끓인다.",
+            "어묵을 넣고 5분 더 끓인다.",
+            "국간장으로 간을 맞춘다.",
+          ],
+          description: "간단하게 끓여 먹는 국물 안주.",
+        },
+        {
+          id: "gochujang-bulgogi",
+          name: "고추장불고기",
+          time: 25,
+          difficulty: "중",
+          tags: ["매콤", "볶음"],
+          ingredients: ["돼지고기 불고기용", "고추장", "양파"],
+          steps: [
+            "고기에 고추장 양념을 버무린다.",
+            "팬에 고기를 볶는다.",
+            "양파를 넣고 센 불에 마무리한다.",
+          ],
+          description: "제육과 불고기 사이의 안정적인 메뉴.",
+        },
+        {
+          id: "beoseot-bokkeum",
+          name: "버섯볶음",
+          time: 12,
+          difficulty: "하",
+          tags: ["반찬", "담백"],
+          ingredients: ["버섯", "간장"],
+          steps: ["버섯을 결대로 찢는다.", "팬에 볶아 간장으로 간을 한다."],
+          description: "어떤 밥상에도 잘 어울리는 반찬.",
+        },
+        {
+          id: "cream-pasta",
+          name: "크림파스타",
+          time: 25,
+          difficulty: "중",
+          tags: ["양식", "부드러움"],
+          ingredients: ["파스타면", "생크림", "마늘"],
+          steps: ["면을 소금물에 삶는다.", "마늘을 볶아 향을 낸다.", "생크림과 면을 넣고 섞는다."],
+          description: "부드러운 맛의 기본 크림 파스타.",
+        },
+        {
+          id: "kongnamul-muchim",
+          name: "콩나물무침",
+          time: 10,
+          difficulty: "하",
+          tags: ["반찬", "담백"],
+          ingredients: ["콩나물", "소금", "참기름"],
+          steps: [
+            "콩나물을 데친다.",
+            "찬물에 헹군다.",
+            "양념에 무친다.",
+          ],
+          description: "집밥 기본 반찬.",
+        },
+        {
+          id: "gamja-chae-bokkeum",
+          name: "감자채볶음",
+          time: 15,
+          difficulty: "하",
+          tags: ["반찬", "담백"],
+          ingredients: ["감자", "식용유", "소금"],
+          steps: [
+            "감자를 가늘게 채 썬다.",
+            "물에 헹궈 전분을 제거한다.",
+            "팬에 기름을 두르고 감자를 볶는다.",
+            "소금으로 간을 맞춘다.",
+          ],
+          description: "아삭한 식감이 살아 있는 기본 반찬.",
+        },
+        {
+          id: "sundae-bokkeum",
+          name: "순대볶음",
+          time: 25,
+          difficulty: "중",
+          tags: ["분식", "매콤"],
+          ingredients: ["순대", "양배추", "고추장"],
+          steps: [
+            "팬에 채소를 먼저 볶는다.",
+            "순대를 넣고 중불에서 볶는다.",
+            "고추장으로 간을 맞춘다.",
+          ],
+          description: "분식집 스타일의 볶음 요리.",
+        },
+        {
+          id: "cheese-omelette",
+          name: "치즈오믈렛",
+          time: 10,
+          difficulty: "하",
+          tags: ["브런치", "부드러움"],
+          ingredients: ["계란", "치즈", "소금"],
+          steps: [
+            "계란을 풀어 소금으로 간한다.",
+            "팬에 붓고 약불에서 익힌다.",
+            "치즈를 올리고 반으로 접는다.",
+          ],
+          description: "아침 메뉴로 좋은 간단 요리.",
+        },
+        {
+          id: "dwaejigogi-kimchi-jjim",
+          name: "돼지고기김치찜",
+          time: 50,
+          difficulty: "중",
+          tags: ["국물", "푸짐"],
+          ingredients: ["돼지고기", "김치", "물"],
+          steps: [
+            "냄비에 고기와 김치를 겹쳐 담는다.",
+            "물을 조금 붓고 약불에서 끓인다.",
+            "40분 이상 푹 익힌다.",
+          ],
+          description: "푹 끓여 깊은 맛이 나는 찜 요리.",
+        },
+        {
+          id: "tuna-kimchi-jjigae",
+          name: "참치김치찌개",
+          time: 25,
+          difficulty: "하",
+          tags: ["국물", "간단"],
+          ingredients: ["김치", "참치캔", "고춧가루"],
+          steps: [
+            "김치를 볶아 향을 낸다.",
+            "물과 참치를 넣고 끓인다.",
+            "고춧가루로 간을 맞춘다.",
+          ],
+          description: "간단하게 끓이는 찌개.",
+        },
+        {
+          id: "bacon-gamja-bokkeum",
+          name: "베이컨감자볶음",
+          time: 20,
+          difficulty: "하",
+          tags: ["반찬", "고소"],
+          ingredients: ["감자", "베이컨"],
+          steps: ["베이컨을 볶아 기름을 낸다.", "감자를 넣고 중불에서 볶는다."],
+          description: "짭짤하고 고소한 반찬.",
+        },
+        {
+          id: "ojingeo-muguk",
+          name: "오징어무국",
+          time: 30,
+          difficulty: "중",
+          tags: ["국물", "해장"],
+          ingredients: ["오징어", "무", "고춧가루"],
+          steps: [
+            "오징어를 볶아 향을 낸다.",
+            "무와 물을 넣고 끓인다.",
+            "고춧가루로 간을 맞춘다.",
+          ],
+          description: "시원하고 칼칼한 국물.",
+        },
+        {
+          id: "yeongeun-jorim",
+          name: "연근조림",
+          time: 35,
+          difficulty: "중",
+          tags: ["반찬", "달짠"],
+          ingredients: ["연근", "간장", "설탕"],
+          steps: [
+            "연근을 썰어 식초물에 담근다.",
+            "팬에 볶은 뒤 양념을 넣어 졸인다.",
+          ],
+          description: "아삭한 식감의 밑반찬.",
+        },
+        {
+          id: "tteok-guk",
+          name: "떡국",
+          time: 25,
+          difficulty: "하",
+          tags: ["국물", "담백"],
+          ingredients: ["떡국떡", "육수"],
+          steps: [
+            "육수를 끓인다.",
+            "떡을 넣고 익힌다.",
+            "간을 맞춰 완성한다.",
+          ],
+          description: "간단하게 끓이는 한 그릇 국.",
+        },
+        {
+          id: "saeu-twigim",
+          name: "새우튀김",
+          time: 30,
+          difficulty: "중",
+          tags: ["튀김", "해산물"],
+          ingredients: ["새우", "튀김가루"],
+          steps: [
+            "새우의 물기를 제거한다.",
+            "튀김옷을 입힌다.",
+            "170도 기름에 튀긴다.",
+          ],
+          description: "바삭한 식감이 좋은 튀김 메뉴.",
+        },
+        {
+          id: "dak-twigim",
+          name: "닭튀김",
+          time: 35,
+          difficulty: "중",
+          tags: ["튀김", "고기"],
+          ingredients: ["닭고기", "튀김가루"],
+          steps: [
+            "닭에 밑간을 한다.",
+            "튀김옷을 입힌다.",
+            "기름에 노릇하게 튀긴다.",
+          ],
+          description: "겉바속촉 튀김 요리.",
+        },
+        {
+          id: "oi-naengguk",
+          name: "오이냉국",
+          time: 10,
+          difficulty: "하",
+          tags: ["시원", "국물"],
+          ingredients: ["오이", "식초", "설탕"],
+          steps: [
+            "오이를 얇게 썬다.",
+            "물에 식초와 설탕을 섞는다.",
+            "오이를 넣어 차갑게 먹는다.",
+          ],
+          description: "여름에 특히 잘 어울리는 국.",
+        },
+        {
+          id: "sausage-jeon",
+          name: "소시지전",
+          time: 15,
+          difficulty: "하",
+          tags: ["전", "간단"],
+          ingredients: ["소시지", "계란"],
+          steps: ["소시지를 썬다.", "계란물을 입힌다.", "팬에 부쳐 익힌다."],
+          description: "아이들도 좋아하는 전 메뉴.",
+        },
+        {
+          id: "dubu-doenjang-muchim",
+          name: "두부된장무침",
+          time: 10,
+          difficulty: "하",
+          tags: ["반찬", "담백"],
+          ingredients: ["두부", "된장"],
+          steps: ["두부를 데쳐 물기를 뺀다.", "된장에 버무린다."],
+          description: "불 안 쓰고 만드는 간단 반찬.",
+        },
+      ];
+
+      function mapCookJsonToRecipes(list) {
+        return list.map((r, idx) => {
+          const tags = Array.isArray(r.tags) ? r.tags : [];
+          const tagSet = new Set(tags);
+
+          const hunger =
+            typeof r.time === "number" && r.time <= 12
+              ? "light"
+              : typeof r.time === "number" && r.time <= 22
+              ? "mid"
+              : "big";
+
+          const mood = new Set();
+          if (tagSet.has("매콤") || tagSet.has("얼큰")) mood.add("stress");
+          if (tagSet.has("간단") || (typeof r.time === "number" && r.time <= 15))
+            mood.add("meh");
+          if (tagSet.has("집밥") || tagSet.has("든든")) mood.add("happy");
+          if (!mood.size) ["happy", "meh", "stress"].forEach((m) => mood.add(m));
+
+          const situation = new Set();
+          if (tagSet.has("한그릇") || tagSet.has("간단")) situation.add("solo");
+          if (tagSet.has("집밥") || tagSet.has("푸짐") || tagSet.has("국물"))
+            situation.add("together");
+          if (!situation.size) ["solo", "together"].forEach((s) => situation.add(s));
+
+          return {
+            ...r,
+            id: r.id || `cook-${idx}`,
+            baseName: r.name,
+            hunger,
+            mood: Array.from(mood),
+            situation: Array.from(situation),
+            tags,
+          };
+        });
+      }
+
+      const cookJsonEmbeddedMapped = mapCookJsonToRecipes(cookJsonEmbedded);
+      const fallbackRecipes = [...baseRecipes, ...cookJsonEmbeddedMapped];
+      let recipes = fallbackRecipes;
+
+      async function loadCookRecipes() {
+        setLoadingState();
+        if (location.protocol === "file:") {
+          recipes = fallbackRecipes;
+          renderStep();
+          return;
+        }
+        try {
+          const res = await fetch("cook.json");
+          if (!res.ok) throw new Error("cook.json fetch failed");
+          const data = await res.json();
+          const mapped = Array.isArray(data) ? mapCookJsonToRecipes(data) : [];
+          recipes =
+            Array.isArray(data) && data.length
+              ? [...baseRecipes, ...mapped]
+              : fallbackRecipes;
+        } catch (err) {
+          console.error(err);
+          recipes = fallbackRecipes;
+        }
+        renderStep();
+      }
+
       const questionEl = document.getElementById("question");
       const questionSubEl = document.getElementById("question-sub");
       const choicesEl = document.getElementById("choices");
@@ -575,10 +1485,20 @@
       const statusEl = document.getElementById("status");
       const copyBtn = document.getElementById("copy-btn");
       const reloadBtn = document.getElementById("reload-btn");
+      const imageEl = document.getElementById("food-image");
+      const imageStatusEl = document.getElementById("image-status");
 
       let stepIndex = 0;
       const answers = {};
       let currentRecipe = null;
+      const PIXABAY_KEY = "53710884-8cf25255c451e1da9731736f6";
+
+      function setLoadingState() {
+        stepNumberEl.textContent = `STEP ${stepIndex + 1} / ${stepsData.length}`;
+        questionEl.textContent = "레시피 불러오는 중...";
+        questionSubEl.textContent = "잠시만 기다려주세요.";
+        choicesEl.innerHTML = "";
+      }
 
       function renderStep() {
         const s = stepsData[stepIndex];
@@ -609,6 +1529,28 @@
         }
       }
 
+      const hungerBuckets = ["big", "mid", "light"];
+
+      function getRandomInt(max) {
+        const arr = new Uint32Array(1);
+        crypto.getRandomValues(arr);
+        return arr[0] % max;
+      }
+
+      function pickRandom(list) {
+        if (!list.length) return null;
+        return list[getRandomInt(list.length)];
+      }
+
+      function pickBalancedHunger() {
+        const availableBuckets = hungerBuckets
+          .map((h) => recipes.filter((r) => r.hunger === h))
+          .filter((bucket) => bucket.length);
+        if (!availableBuckets.length) return pickRandom(recipes);
+        const bucket = availableBuckets[getRandomInt(availableBuckets.length)];
+        return pickRandom(bucket);
+      }
+
       function pickRecipe({ hunger, mood, situation }) {
         const strict = recipes.filter(
           (r) =>
@@ -616,17 +1558,27 @@
             r.mood.includes(mood) &&
             r.situation.includes(situation)
         );
+        if (strict.length) return pickRandom(strict);
 
-        if (strict.length)
-          return strict[Math.floor(Math.random() * strict.length)];
-
-        const loose = recipes.filter(
+        const hungerMood = recipes.filter(
           (r) => r.hunger === hunger && r.mood.includes(mood)
         );
-        if (loose.length)
-          return loose[Math.floor(Math.random() * loose.length)];
+        if (hungerMood.length) return pickRandom(hungerMood);
 
-        return recipes[Math.floor(Math.random() * recipes.length)];
+        const hungerSituation = recipes.filter(
+          (r) => r.hunger === hunger && r.situation.includes(situation)
+        );
+        if (hungerSituation.length) return pickRandom(hungerSituation);
+
+        const moodSituation = recipes.filter(
+          (r) => r.mood.includes(mood) && r.situation.includes(situation)
+        );
+        if (moodSituation.length) return pickRandom(moodSituation);
+
+        const hungerOnly = recipes.filter((r) => r.hunger === hunger);
+        if (hungerOnly.length) return pickRandom(hungerOnly);
+
+        return pickBalancedHunger();
       }
 
       function showResult() {
@@ -651,6 +1603,7 @@
 
         statusEl.textContent =
           "🛒 장보기 리스트 복사하면 바로 마켓에 붙여넣을 수 있어요.";
+        loadImageForRecipe(currentRecipe);
       }
 
       function copyShoppingList() {
@@ -671,10 +1624,52 @@
           });
       }
 
+      function setImagePlaceholder(message) {
+        imageEl.classList.add("hidden");
+        imageEl.removeAttribute("src");
+        imageStatusEl.textContent = message;
+        imageStatusEl.classList.remove("hidden");
+      }
+
+      function showImage(url, altText) {
+        imageEl.src = url;
+        imageEl.alt = altText;
+        imageEl.classList.remove("hidden");
+        imageStatusEl.classList.add("hidden");
+      }
+
+      async function loadImageForRecipe(recipe) {
+        setImagePlaceholder("이미지 불러오는 중...");
+        const queryText = recipe.baseName || recipe.name;
+        const url = new URL("https://pixabay.com/api/");
+        url.searchParams.set("key", PIXABAY_KEY);
+        url.searchParams.set("q", queryText);
+        url.searchParams.set("image_type", "photo");
+        url.searchParams.set("orientation", "horizontal");
+        url.searchParams.set("safesearch", "true");
+        url.searchParams.set("lang", "ko");
+        url.searchParams.set("per_page", "6");
+        console.log("[image search]", queryText, url.toString());
+
+        try {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error("Pixabay request failed");
+          const data = await res.json();
+          const hit = (data.hits || [])[0];
+          if (hit && hit.webformatURL) {
+            showImage(hit.webformatURL, `${queryText} 이미지`);
+          } else {
+            setImagePlaceholder("이미지를 찾지 못했어요. 다른 메뉴로 시도해보세요.");
+          }
+        } catch (err) {
+          setImagePlaceholder("이미지 불러오기 실패. 새로고침 후 다시 시도해주세요.");
+        }
+      }
+
       copyBtn.addEventListener("click", copyShoppingList);
       reloadBtn.addEventListener("click", () => window.location.reload());
 
-      renderStep();
+      loadCookRecipes();
     </script>
   </body>
 </html>
