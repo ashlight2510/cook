@@ -167,17 +167,6 @@
             </div>
             <p id="comment" class="text-slate-700 mt-3 leading-relaxed"></p>
           </div>
-          <div
-            class="w-full md:w-60 h-40 overflow-hidden rounded-2xl shadow-md border border-slate-100 bg-slate-100"
-          >
-            <img
-              id="photo"
-              src=""
-              alt="오늘의 요리 이미지"
-              class="w-full h-full object-cover transition-opacity duration-300 opacity-0"
-              loading="lazy"
-            />
-          </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 mt-6">
@@ -219,13 +208,6 @@
           <div class="glass rounded-2xl p-4">
             <div class="flex items-center justify-between mb-2">
               <p class="text-sm font-semibold text-slate-900">바로 따라하기</p>
-              <button
-                id="share-btn"
-                class="text-sm font-semibold px-4 py-2 rounded-full bg-white text-brand-800 border border-brand-200 hover:bg-brand-50 hover:-translate-y-0.5 hover:shadow-xl shadow-md transition"
-                type="button"
-              >
-                📸 요리 카드 이미지
-              </button>
             </div>
             <ol
               id="steps"
@@ -590,10 +572,8 @@
       const tagsEl = document.getElementById("tags");
       const ingredientsEl = document.getElementById("ingredients");
       const stepsEl = document.getElementById("steps");
-      const photoEl = document.getElementById("photo");
       const statusEl = document.getElementById("status");
       const copyBtn = document.getElementById("copy-btn");
-      const shareBtn = document.getElementById("share-btn");
       const reloadBtn = document.getElementById("reload-btn");
 
       let stepIndex = 0;
@@ -666,28 +646,11 @@
           .join("");
 
         stepsEl.innerHTML = currentRecipe.steps
-          .map((s, i) => `<li>${i + 1}. ${s}</li>`)
+          .map((s) => `<li>${s}</li>`)
           .join("");
 
         statusEl.textContent =
           "🛒 장보기 리스트 복사하면 바로 마켓에 붙여넣을 수 있어요.";
-        loadPhoto(currentRecipe);
-      }
-
-      function loadPhoto(recipe) {
-        const keywords = encodeURIComponent(`${recipe.name} food bright`);
-        const url = `https://source.unsplash.com/1080x720/?${keywords}`;
-        const wrapper = photoEl.parentElement;
-        photoEl.style.opacity = 0;
-        wrapper.classList.remove("hidden");
-        photoEl.onload = () => {
-          photoEl.style.opacity = 1;
-        };
-        photoEl.onerror = () => {
-          photoEl.removeAttribute("src");
-          wrapper.classList.add("hidden");
-        };
-        photoEl.src = url;
       }
 
       function copyShoppingList() {
@@ -708,123 +671,7 @@
           });
       }
 
-      function drawWrappedText(ctx, text, x, y, maxWidth, lineHeight) {
-        const words = text.split(" ");
-        let line = "";
-        const lines = [];
-        words.forEach((word) => {
-          const testLine = line + word + " ";
-          const metrics = ctx.measureText(testLine);
-          if (metrics.width > maxWidth) {
-            lines.push(line.trim());
-            line = word + " ";
-          } else {
-            line = testLine;
-          }
-        });
-        lines.push(line.trim());
-        lines.forEach((l, i) => ctx.fillText(l, x, y + i * lineHeight));
-      }
-
-      async function generateShareCard() {
-        if (!currentRecipe) return;
-        statusEl.textContent = "📸 요리 카드 이미지 준비 중... (1~2초)";
-        const canvas = document.createElement("canvas");
-        const width = 1080;
-        const height = 1350;
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext("2d");
-
-        const gradient = ctx.createLinearGradient(0, 0, 0, height);
-        gradient.addColorStop(0, "#e0f7ff");
-        gradient.addColorStop(1, "#a5f3fc");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.fillStyle = "rgba(255,255,255,0.6)";
-        ctx.beginPath();
-        if (typeof ctx.roundRect === "function") {
-          ctx.roundRect(60, 120, width - 120, height - 240, 40);
-        } else {
-          ctx.rect(60, 120, width - 120, height - 240);
-        }
-        ctx.fill();
-
-        await document.fonts.ready;
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "24px 'Space Grotesk'";
-        ctx.fillText("오늘 뭐먹지? Recipe Card", 100, 180);
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "56px 'Noto Sans KR'";
-        ctx.fillText(currentRecipe.name, 100, 260);
-
-        ctx.fillStyle = "#1f2937";
-        ctx.font = "24px 'Noto Sans KR'";
-        drawWrappedText(
-          ctx,
-          currentRecipe.description,
-          100,
-          310,
-          width - 200,
-          34
-        );
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "22px 'Space Grotesk'";
-        ctx.fillText(
-          `⏱ ${currentRecipe.time}분  ·  🔥 난이도 ${currentRecipe.difficulty}`,
-          100,
-          390
-        );
-
-        ctx.fillStyle = "#0f172a";
-        ctx.font = "22px 'Noto Sans KR'";
-        ctx.fillText(`✨ ${currentRecipe.tags.join(", ")}`, 100, 430);
-
-        ctx.font = "26px 'Noto Sans KR'";
-        ctx.fillStyle = "#0f172a";
-        ctx.fillText("장보기 리스트", 100, 500);
-        ctx.font = "22px 'Noto Sans KR'";
-        currentRecipe.ingredients.forEach((ing, idx) => {
-          const y = 540 + idx * 32;
-          drawWrappedText(ctx, `• ${ing}`, 100, y, width - 200, 32);
-        });
-
-        ctx.font = "26px 'Noto Sans KR'";
-        ctx.fillStyle = "#0f172a";
-        const stepsStart = 540 + currentRecipe.ingredients.length * 32 + 40;
-        ctx.fillText("만드는 법", 100, stepsStart);
-        ctx.font = "22px 'Noto Sans KR'";
-        currentRecipe.steps.forEach((st, idx) => {
-          const y = stepsStart + 40 + idx * 34;
-          drawWrappedText(ctx, `${idx + 1}. ${st}`, 100, y, width - 200, 34);
-        });
-
-        ctx.strokeStyle = "#0f172a";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(100, height - 120);
-        ctx.lineTo(width - 100, height - 120);
-        ctx.stroke();
-
-        ctx.font = "24px 'Space Grotesk'";
-        ctx.fillStyle = "#0f172a";
-        const footer = "funnyfunny.cloud";
-        const footerWidth = ctx.measureText(footer).width;
-        ctx.fillText(footer, (width - footerWidth) / 2, height - 80);
-
-        const url = canvas.toDataURL("image/png");
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${currentRecipe.id}-card.png`;
-        link.click();
-        statusEl.textContent = "📸 요리 카드 이미지를 저장했어요.";
-      }
-
       copyBtn.addEventListener("click", copyShoppingList);
-      shareBtn.addEventListener("click", generateShareCard);
       reloadBtn.addEventListener("click", () => window.location.reload());
 
       renderStep();
