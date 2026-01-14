@@ -87,13 +87,54 @@
         background: rgba(255, 255, 255, 0.85);
         border: 1px solid rgba(15, 23, 42, 0.06);
       }
+      .lang-switch {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        display: inline-flex;
+        gap: 0;
+        padding: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 100;
+      }
+      .lang-switch button {
+        border: none;
+        background: transparent;
+        color: rgba(15, 23, 42, 0.6);
+        font-size: 12px;
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        min-width: 44px;
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
+      .lang-switch button.active {
+        background: linear-gradient(135deg, #06b6d4, #0891b2);
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(6, 182, 212, 0.4);
+      }
+      .lang-switch button:not(.active):hover {
+        background: rgba(6, 182, 212, 0.08);
+        color: rgba(15, 23, 42, 0.9);
+      }
     </style>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1204894220949193"
-     crossorigin="anonymous"></script>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1204894220949193"
+      crossorigin="anonymous"
+    ></script>
     <!-- responsive-base -->
     <style>
       /* responsive-base */
-      *, *::before, *::after {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
       html {
@@ -115,21 +156,26 @@
         word-break: break-word;
       }
     </style>
-  <style>
-    .adsense-block {
-      margin: 16px 0;
-      display: flex;
-      justify-content: center;
-    }
-    .adsbygoogle {
-      display: block;
-      margin: 16px auto;
+    <style>
+      .adsense-block {
+        margin: 16px 0;
+        display: flex;
+        justify-content: center;
+      }
+      .adsbygoogle {
+        display: block;
+        margin: 16px auto;
         text-align: center;
-}
-  </style>
-</head>
+      }
+    </style>
+  </head>
 
-  <body class="min-h-screen text-slate-900 relative overflow-x-hidden"><div class="absolute inset-0 pointer-events-none">
+  <body class="min-h-screen text-slate-900 relative overflow-x-hidden">
+    <div class="lang-switch" role="tablist" aria-label="Language switcher">
+      <button type="button" data-lang="ko" class="active">KR</button>
+      <button type="button" data-lang="en">EN</button>
+    </div>
+    <div class="absolute inset-0 pointer-events-none">
       <div
         class="absolute w-72 h-72 bg-brand-300/30 blur-3xl -left-16 top-10 rounded-full"
       ></div>
@@ -150,14 +196,17 @@
             <span
               class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"
             ></span>
-            밝고 기분 좋은 200+ 레시피 조합
+            <span data-i18n="headerBadge">밝고 기분 좋은 200+ 레시피 조합</span>
           </div>
           <h1
             class="text-3xl md:text-4xl font-extrabold mt-3 leading-tight text-slate-900"
           >
-            오늘 뭐먹지? <span class="text-brand-600">바로 만들어먹기</span>
+            <span data-i18n="title">오늘 뭐먹지?</span>
+            <span class="text-brand-600" data-i18n="titleSub"
+              >바로 만들어먹기</span
+            >
           </h1>
-          <p class="text-slate-600 mt-2 leading-relaxed">
+          <p class="text-slate-600 mt-2 leading-relaxed" data-i18n="subtitle">
             배고픔 · 기분 · 상황만 알려주세요. 친절한 한 줄 코멘트와 장보기
             리스트까지 바로 준비해둘게요.
           </p>
@@ -172,7 +221,9 @@
           <span id="step-number" class="font-semibold text-brand-600"
             >STEP 1 / 3</span
           >
-          <span class="text-slate-500">입맛, 기분, 상황을 알려주세요</span>
+          <span class="text-slate-500" data-i18n="stepHint"
+            >입맛, 기분, 상황을 알려주세요</span
+          >
         </div>
         <div class="flex flex-col gap-2 mb-6">
           <p id="question" class="text-2xl font-bold text-slate-900"></p>
@@ -193,7 +244,10 @@
           class="flex flex-col md:flex-row md:items-center justify-between gap-4"
         >
           <div class="flex-1">
-            <p class="text-xs uppercase tracking-[0.2em] text-brand-600 mb-1">
+            <p
+              class="text-xs uppercase tracking-[0.2em] text-brand-600 mb-1"
+              data-i18n="recipeTitle"
+            >
               오늘의 레시피
             </p>
             <div class="flex items-center gap-3 flex-wrap">
@@ -219,22 +273,28 @@
               id="image-status"
               class="absolute inset-0 flex items-center justify-center text-sm text-slate-500"
             >
-              이미지 준비 중...
+              <span data-i18n="imageLoading">이미지 준비 중...</span>
             </div>
           </div>
         </div>
 
         <div class="grid md:grid-cols-3 gap-4 mt-6">
           <div class="glass rounded-2xl p-4">
-            <p class="text-xs text-slate-500 mb-2">조리 시간</p>
+            <p class="text-xs text-slate-500 mb-2" data-i18n="labelTime">
+              조리 시간
+            </p>
             <p id="time" class="text-lg font-semibold text-slate-900"></p>
           </div>
           <div class="glass rounded-2xl p-4">
-            <p class="text-xs text-slate-500 mb-2">난이도</p>
+            <p class="text-xs text-slate-500 mb-2" data-i18n="labelDifficulty">
+              난이도
+            </p>
             <p id="difficulty" class="text-lg font-semibold text-slate-900"></p>
           </div>
           <div class="glass rounded-2xl p-4">
-            <p class="text-xs text-slate-500 mb-2">특징</p>
+            <p class="text-xs text-slate-500 mb-2" data-i18n="labelTags">
+              특징
+            </p>
             <p
               id="tags"
               class="text-sm font-medium text-brand-700 leading-relaxed"
@@ -245,11 +305,17 @@
         <div class="grid md:grid-cols-2 gap-5 mt-6">
           <div class="glass rounded-2xl p-4">
             <div class="flex items-center justify-between mb-2">
-              <p class="text-sm font-semibold text-slate-900">장보기 리스트</p>
+              <p
+                class="text-sm font-semibold text-slate-900"
+                data-i18n="labelIngredients"
+              >
+                장보기 리스트
+              </p>
               <button
                 id="copy-btn"
                 class="text-xs font-semibold px-3 py-1 rounded-full bg-brand-100 text-brand-700 border border-brand-200 hover:bg-brand-200 transition"
                 type="button"
+                data-i18n="btnCopyList"
               >
                 장보기 리스트 복사
               </button>
@@ -262,7 +328,12 @@
 
           <div class="glass rounded-2xl p-4">
             <div class="flex items-center justify-between mb-2">
-              <p class="text-sm font-semibold text-slate-900">바로 따라하기</p>
+              <p
+                class="text-sm font-semibold text-slate-900"
+                data-i18n="labelSteps"
+              >
+                바로 따라하기
+              </p>
             </div>
             <ol
               id="steps"
@@ -279,7 +350,7 @@
             class="w-full md:w-auto justify-center inline-flex items-center gap-2 px-4 py-3 rounded-xl font-semibold bg-slate-900 text-white hover:bg-slate-800 transition"
             type="button"
           >
-            다시 고르기
+            <span data-i18n="btnReload">다시 고르기</span>
           </button>
           <div class="text-sm text-slate-600 md:ml-2" id="status"></div>
         </div>
@@ -290,7 +361,10 @@
       >
         <div>
           <p class="text-sm font-semibold text-slate-900">FunnyFunny Cloud</p>
-          <p class="text-slate-600 text-sm leading-relaxed">
+          <p
+            class="text-slate-600 text-sm leading-relaxed"
+            data-i18n="footerDesc"
+          >
             더 많은 테스트와 실험적인 기능을 여기서 먼저 써보세요.
           </p>
         </div>
@@ -299,6 +373,7 @@
           href="https://funnyfunny.cloud"
           target="_blank"
           rel="noreferrer"
+          data-i18n="footerLink"
         >
           더 해보기
           <span aria-hidden="true">↗</span>
@@ -307,38 +382,255 @@
     </main>
 
     <script>
-      const stepsData = [
-        {
-          key: "hunger",
-          q: "얼마나 배고파?",
-          sub: "든든한 한 끼가 필요한지, 가볍게 채울지 선택해주세요.",
-          a: [
-            { t: "배고파 죽겠음", v: "big" },
-            { t: "적당히 배고픔", v: "mid" },
-            { t: "입이 심심함", v: "light" },
-          ],
+      const translations = {
+        ko: {
+          metaTitle: "오늘 뭐먹지? - 바로 만들어먹는 레시피 추천",
+          headerBadge: "밝고 기분 좋은 200+ 레시피 조합",
+          title: "오늘 뭐먹지?",
+          titleSub: "바로 만들어먹기",
+          subtitle:
+            "배고픔 · 기분 · 상황만 알려주세요. 친절한 한 줄 코멘트와 장보기 리스트까지 바로 준비해둘게요.",
+          stepHint: "입맛, 기분, 상황을 알려주세요",
+          recipeTitle: "오늘의 레시피",
+          labelTime: "조리 시간",
+          labelDifficulty: "난이도",
+          labelTags: "특징",
+          labelIngredients: "장보기 리스트",
+          labelSteps: "바로 따라하기",
+          btnCopyList: "장보기 리스트 복사",
+          btnReload: "다시 고르기",
+          footerDesc: "더 많은 테스트와 실험적인 기능을 여기서 먼저 써보세요.",
+          footerLink: "더 해보기",
+          loadingRecipe: "레시피 불러오는 중...",
+          loadingWait: "잠시만 기다려주세요.",
+          statusCopyHint:
+            "🛒 장보기 리스트 복사하면 바로 마켓에 붙여넣을 수 있어요.",
+          statusCopySuccess: "✅ 복사 완료! 장볼 때 붙여넣기만 하면 끝.",
+          statusCopyFail:
+            "클립보드 접근이 차단되었습니다. 브라우저 설정을 확인해 주세요.",
+          imageLoading: "이미지 불러오는 중...",
+          imageNotFound: "이미지를 찾지 못했어요. 다른 메뉴로 시도해보세요.",
+          imageFail: "이미지 불러오기 실패. 새로고침 후 다시 시도해주세요.",
+          timeFormat: "{time}분이면 완성",
+          difficultyFormat: "체감 난이도: {difficulty}",
+          difficultyEasy: "하",
+          difficultyMedium: "중",
+          difficultyHard: "상",
+          copyListTitle: "[{name}] 장보기 리스트",
+          badgeFormat: "{time}분 · {difficulty}",
+          stepFormat: "STEP {current} / {total}",
+          hungerQ: "얼마나 배고파?",
+          hungerSub: "든든한 한 끼가 필요한지, 가볍게 채울지 선택해주세요.",
+          hungerBig: "배고파 죽겠음",
+          hungerMid: "적당히 배고픔",
+          hungerLight: "입이 심심함",
+          moodQ: "오늘 기분은?",
+          moodSub: "기분에 맞는 맛의 강도를 맞춰볼게요.",
+          moodStress: "스트레스 😵",
+          moodHappy: "기분 좋음 😆",
+          moodMeh: "아무 생각 없음 😐",
+          situationQ: "상황은?",
+          situationSub:
+            "혼자, 같이, 배달 여부에 따라 최적의 요리를 추천합니다.",
+          situationSolo: "혼밥",
+          situationTogether: "같이 먹음",
+          situationDelivery: "배달 예정",
         },
-        {
-          key: "mood",
-          q: "오늘 기분은?",
-          sub: "기분에 맞는 맛의 강도를 맞춰볼게요.",
-          a: [
-            { t: "스트레스 😵", v: "stress" },
-            { t: "기분 좋음 😆", v: "happy" },
-            { t: "아무 생각 없음 😐", v: "meh" },
-          ],
+        en: {
+          metaTitle: "What to Eat Today? - Recipe Recommendations",
+          headerBadge: "Bright and happy 200+ recipe combinations",
+          title: "What to Eat Today?",
+          titleSub: "Cook it now",
+          subtitle:
+            "Just tell us your hunger level, mood, and situation. We'll prepare a friendly one-line comment and shopping list for you.",
+          stepHint: "Tell us your taste, mood, and situation",
+          recipeTitle: "Today's Recipe",
+          labelTime: "Cooking Time",
+          labelDifficulty: "Difficulty",
+          labelTags: "Features",
+          labelIngredients: "Shopping List",
+          labelSteps: "Follow Along",
+          btnCopyList: "Copy Shopping List",
+          btnReload: "Choose Again",
+          footerDesc: "Try more tests and experimental features here first.",
+          footerLink: "Try More",
+          loadingRecipe: "Loading recipes...",
+          loadingWait: "Please wait a moment.",
+          statusCopyHint:
+            "🛒 Copy the shopping list and paste it directly at the market.",
+          statusCopySuccess: "✅ Copy complete! Just paste when shopping.",
+          statusCopyFail:
+            "Clipboard access is blocked. Please check your browser settings.",
+          imageLoading: "Loading image...",
+          imageNotFound: "Could not find image. Try a different menu.",
+          imageFail: "Failed to load image. Please refresh and try again.",
+          timeFormat: "Done in {time} min",
+          difficultyFormat: "Perceived difficulty: {difficulty}",
+          difficultyEasy: "Easy",
+          difficultyMedium: "Medium",
+          difficultyHard: "Hard",
+          copyListTitle: "[{name}] Shopping List",
+          badgeFormat: "{time} min · {difficulty}",
+          stepFormat: "STEP {current} / {total}",
+          hungerQ: "How hungry are you?",
+          hungerSub:
+            "Choose whether you need a hearty meal or just a light snack.",
+          hungerBig: "Starving",
+          hungerMid: "Moderately hungry",
+          hungerLight: "Just a snack",
+          moodQ: "How are you feeling?",
+          moodSub: "We'll match the flavor intensity to your mood.",
+          moodStress: "Stressed 😵",
+          moodHappy: "Happy 😆",
+          moodMeh: "Neutral 😐",
+          situationQ: "What's the situation?",
+          situationSub:
+            "We'll recommend the best dish based on whether you're eating alone, together, or ordering delivery.",
+          situationSolo: "Eating alone",
+          situationTogether: "Eating together",
+          situationDelivery: "Ordering delivery",
         },
-        {
-          key: "situation",
-          q: "상황은?",
-          sub: "혼자, 같이, 배달 여부에 따라 최적의 요리를 추천합니다.",
-          a: [
-            { t: "혼밥", v: "solo" },
-            { t: "같이 먹음", v: "together" },
-            { t: "배달 예정", v: "delivery" },
-          ],
-        },
-      ];
+      };
+
+      const originalTitle = document.title;
+      const originalText = new Map();
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        originalText.set(el, el.textContent);
+      });
+
+      const defaultLang = "en";
+      const supportedLangs = ["ko", "en"];
+      let currentLang = defaultLang;
+
+      function t(key, vars = {}) {
+        const langTable = translations[currentLang] || translations.ko;
+        const template = langTable?.[key] ?? translations.ko?.[key] ?? key;
+        if (typeof template !== "string") {
+          return template;
+        }
+        return template.replace(/\{(\w+)\}/g, (_, token) =>
+          vars[token] !== undefined ? vars[token] : `{${token}}`
+        );
+      }
+
+      function applyTranslations() {
+        const isEnglish = currentLang === "en";
+
+        document.title = isEnglish ? t("metaTitle") : originalTitle;
+        document.documentElement.lang = currentLang;
+
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          if (isEnglish) {
+            el.textContent = t(el.dataset.i18n);
+          } else if (originalText.has(el)) {
+            el.textContent = originalText.get(el);
+          }
+        });
+      }
+
+      function setLang(lang, options = {}) {
+        const nextLang = translations[lang] ? lang : defaultLang;
+        currentLang = nextLang;
+        document.documentElement.lang = nextLang;
+        localStorage.setItem("preferredLang", nextLang);
+        document.querySelectorAll(".lang-switch button").forEach((button) => {
+          button.classList.toggle("active", button.dataset.lang === nextLang);
+        });
+        applyTranslations();
+
+        // DOM이 준비된 후에만 renderStep과 showResult 호출
+        if (options.updateUrl || options.forceUpdate) {
+          if (
+            typeof renderStep === "function" &&
+            typeof stepIndex !== "undefined" &&
+            typeof questionEl !== "undefined" &&
+            questionEl
+          ) {
+            renderStep();
+          }
+          if (typeof showResult === "function" && currentRecipe) {
+            showResult();
+          }
+        }
+
+        if (options.updateUrl) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("lang", nextLang);
+          window.history.replaceState({}, "", url);
+        }
+      }
+
+      function getRegionPreferredLang(fallback = defaultLang) {
+        const intlLocale =
+          typeof Intl === "object" && typeof Intl.DateTimeFormat === "function"
+            ? Intl.DateTimeFormat().resolvedOptions().locale
+            : "";
+        const sources = [
+          ...(navigator.languages || []),
+          navigator.language,
+          navigator.userLanguage,
+          intlLocale,
+        ]
+          .filter(Boolean)
+          .map((locale) => locale.toLowerCase());
+        const hasKorean = sources.some((locale) => locale.startsWith("ko"));
+        return hasKorean ? "ko" : fallback;
+      }
+
+      function detectLang() {
+        const params = new URLSearchParams(window.location.search);
+        const paramLang = params.get("lang");
+        if (supportedLangs.includes(paramLang)) return paramLang;
+        const stored = localStorage.getItem("preferredLang");
+        if (supportedLangs.includes(stored)) return stored;
+        const candidate = getRegionPreferredLang(defaultLang);
+        return supportedLangs.includes(candidate) ? candidate : defaultLang;
+      }
+
+      document.querySelectorAll(".lang-switch button").forEach((button) => {
+        button.addEventListener("click", () => {
+          setLang(button.dataset.lang, { updateUrl: true, forceUpdate: true });
+        });
+      });
+
+      // 초기 언어 설정 (DOM 준비 전이므로 renderStep 호출 안 함)
+      setLang(detectLang(), { updateUrl: false, forceUpdate: false });
+
+      function getStepsData() {
+        return [
+          {
+            key: "hunger",
+            q: t("hungerQ"),
+            sub: t("hungerSub"),
+            a: [
+              { t: t("hungerBig"), v: "big" },
+              { t: t("hungerMid"), v: "mid" },
+              { t: t("hungerLight"), v: "light" },
+            ],
+          },
+          {
+            key: "mood",
+            q: t("moodQ"),
+            sub: t("moodSub"),
+            a: [
+              { t: t("moodStress"), v: "stress" },
+              { t: t("moodHappy"), v: "happy" },
+              { t: t("moodMeh"), v: "meh" },
+            ],
+          },
+          {
+            key: "situation",
+            q: t("situationQ"),
+            sub: t("situationSub"),
+            a: [
+              { t: t("situationSolo"), v: "solo" },
+              { t: t("situationTogether"), v: "together" },
+              { t: t("situationDelivery"), v: "delivery" },
+            ],
+          },
+        ];
+      }
 
       const baseRecipes = [
         {
@@ -368,6 +660,26 @@
             "불을 끄고 참기름을 살짝 두른다.",
           ],
           description: "강한 불맛과 매콤함으로 스트레스까지 태워버리는 메뉴.",
+          nameEn: "Spicy Pork Stir-Fry",
+          descriptionEn:
+            "A menu that burns away stress with strong fire flavor and spiciness.",
+          ingredientsEn: [
+            "Pork shoulder 300g",
+            "Onion 1/2",
+            "Green onion 1 stalk",
+            "Cabbage a handful",
+            "Gochujang 2 tbsp, Gochugaru 1 tbsp",
+            "Soy sauce 1 tbsp, Sugar 1 tbsp",
+            "Minced garlic 1 tbsp, Sesame oil a bit",
+          ],
+          stepsEn: [
+            "Cut pork into bite-sized pieces.",
+            "Mix gochujang, gochugaru, soy sauce, sugar, and minced garlic to make seasoning sauce.",
+            "Marinate pork with seasoning sauce for 10 minutes.",
+            "Heat pan and stir-fry marinated pork, then add vegetables and stir-fry quickly over high heat.",
+            "Turn off heat and drizzle sesame oil.",
+          ],
+          tagsEn: ["Spicy", "Home-cooked", "Rice thief"],
         },
         {
           id: "kimchi-stew",
@@ -395,6 +707,25 @@
             "두부와 대파를 넣고 5분 더 끓인 뒤 간을 맞춘다.",
           ],
           description: "아무 생각 없이 끓여도 실패 없는 가장 무난한 해답.",
+          nameEn: "Kimchi Stew",
+          descriptionEn:
+            "The most reliable solution that never fails even when made without thinking.",
+          ingredientsEn: [
+            "Aged kimchi 1 cup",
+            "Pork 150g",
+            "Tofu 1/2 block",
+            "Green onion 1 stalk",
+            "Gochugaru 1 tbsp",
+            "Doenjang 1/2 tbsp",
+            "Garlic 1 tbsp",
+            "Water 500ml",
+          ],
+          stepsEn: [
+            "Stir-fry pork and kimchi in pot to extract oil.",
+            "Add water, gochugaru, and doenjang, and boil for 20 minutes.",
+            "Add tofu and green onion, boil 5 more minutes, then adjust seasoning.",
+          ],
+          tagsEn: ["Broth", "Home-cooked", "Korean soul"],
         },
         {
           id: "mala-tang",
@@ -421,6 +752,23 @@
           ],
           description:
             "배달 시켜도 되고, 재료만 있으면 집에서 즉시 가능한 강력 메뉴.",
+          nameEn: "Mala Tang (Delivery Option)",
+          descriptionEn:
+            "A powerful menu that can be ordered for delivery or made at home immediately if you have the ingredients.",
+          ingredientsEn: [
+            "Mala tang broth or hot pot sauce",
+            "Chinese noodles",
+            "Vegetables (bean sprouts, cabbage, bok choy, etc.)",
+            "Fish cakes, ham, king oyster mushrooms",
+            "Pepper, cilantro (optional)",
+          ],
+          stepsEn: [
+            "Boil broth and season with hot pot sauce.",
+            "Add noodles and hard ingredients first, then boil.",
+            "Add vegetables and boil 3-4 more minutes, then serve.",
+            "Add lajiaojiang if you want it spicier.",
+          ],
+          tagsEn: ["Numbing spicy", "Hearty", "Hangover cure"],
         },
         {
           id: "pasta-cream",
@@ -449,6 +797,25 @@
           ],
           description:
             "크림의 부드러움으로 오늘 기분을 한 단계 끌어올리는 메뉴.",
+          nameEn: "Mushroom Cream Pasta",
+          descriptionEn:
+            "A menu that elevates today's mood with the smoothness of cream.",
+          ingredientsEn: [
+            "Spaghetti 200g",
+            "White mushrooms 4-5",
+            "Onion 1/4",
+            "Heavy cream 200ml",
+            "Parmesan cheese a handful",
+            "Butter 1 tbsp",
+            "Salt, pepper",
+          ],
+          stepsEn: [
+            "Cook pasta in salted water until al dente.",
+            "Melt butter in pan and sauté onion and mushrooms.",
+            "Pour in cream, adjust seasoning, then add pasta and mix.",
+            "Sprinkle cheese and pepper to finish.",
+          ],
+          tagsEn: ["Creamy", "Simple", "Guest-friendly"],
         },
         {
           id: "bibim-noodle",
@@ -474,6 +841,23 @@
             "면과 양념을 버무리고 오이채와 달걀을 올린다.",
           ],
           description: "입이 심심할 때 빠르게 만들 수 있는 상큼한 한 그릇.",
+          nameEn: "Bibim Noodles",
+          descriptionEn:
+            "A refreshing one-bowl dish that can be made quickly when you want a snack.",
+          ingredientsEn: [
+            "Thin noodles 100g",
+            "Cucumber strips a handful",
+            "Boiled egg 1",
+            "Gochujang 1 tbsp, Vinegar 1 tbsp",
+            "Sugar 1 tbsp, Sesame oil 1 tsp",
+            "Minced garlic 1/2 tbsp",
+          ],
+          stepsEn: [
+            "Boil noodles, rinse in cold water to remove starch.",
+            "Mix gochujang, vinegar, sugar, sesame oil, and garlic to make sauce.",
+            "Toss noodles with sauce and top with cucumber and egg.",
+          ],
+          tagsEn: ["Tangy sweet", "One-bowl", "Summer"],
         },
         {
           id: "salmon-poke",
@@ -499,6 +883,22 @@
             "밥 위에 연어와 채소를 올리고 소스를 뿌린다.",
           ],
           description: "기분 좋은 날, 가볍지만 근사하게 먹기 좋은 한 그릇.",
+          nameEn: "Salmon Poke",
+          descriptionEn: "A light but elegant one-bowl perfect for a good day.",
+          ingredientsEn: [
+            "Salmon sashimi 200g",
+            "Avocado 1/2",
+            "Cucumber, red onion a bit",
+            "Soy sauce 2 tbsp, Lemon juice 1 tbsp",
+            "Sesame oil 1 tsp, Pepper",
+            "Rice or quinoa 1 bowl",
+          ],
+          stepsEn: [
+            "Cut salmon and vegetables into bite-sized pieces.",
+            "Make sauce with soy sauce, lemon juice, and sesame oil.",
+            "Top rice with salmon and vegetables, then drizzle sauce.",
+          ],
+          tagsEn: ["Fresh", "Cool", "Filling"],
         },
         {
           id: "kimchi-fried-rice",
@@ -524,6 +924,23 @@
             "고춧가루로 색을 맞추고, 계란 프라이를 얹어 완성한다.",
           ],
           description: "머리 비우고 휘리릭 완성하는 국민 볶음밥.",
+          nameEn: "Kimchi Fried Rice",
+          descriptionEn:
+            "The nation's fried rice that you can whip up without thinking.",
+          ingredientsEn: [
+            "Rice 1 bowl",
+            "Well-fermented kimchi 1/2 cup",
+            "Green onion 1/2 stalk",
+            "Soy sauce 1 tbsp",
+            "Gochugaru 1/2 tbsp",
+            "Cooking oil, Egg 1",
+          ],
+          stepsEn: [
+            "Heat oil in pan and sauté green onion to extract flavor.",
+            "Add kimchi and stir-fry, then add rice and soy sauce and mix.",
+            "Adjust color with gochugaru, top with fried egg to finish.",
+          ],
+          tagsEn: ["Home-cooked", "Simple", "One-bowl"],
         },
         {
           id: "avocado-toast",
@@ -548,6 +965,21 @@
           ],
           description:
             "요리라고 부르기 민망하지만, 기분 좋은 날 어울리는 심플 브런치.",
+          nameEn: "Avocado Toast",
+          descriptionEn:
+            "Embarrassing to call it cooking, but a simple brunch perfect for a good day.",
+          ingredientsEn: [
+            "Bread 1 slice",
+            "Avocado 1/2",
+            "Lemon juice a bit",
+            "Olive oil, Salt, Pepper",
+          ],
+          stepsEn: [
+            "Toast bread until crispy.",
+            "Mash avocado and mix with lemon juice, salt, pepper, and olive oil.",
+            "Pile generously on bread and eat in one bite.",
+          ],
+          tagsEn: ["Brunch", "Light", "Diet-friendly"],
         },
         {
           id: "taco-night",
@@ -573,6 +1005,23 @@
             "고기, 채소, 치즈를 올리고 사워크림을 곁들여 접는다.",
           ],
           description: "같이 먹으며 취향껏 커스터마이징할 수 있는 단체용 메뉴.",
+          nameEn: "Easy Taco Night",
+          descriptionEn:
+            "A group menu where you can customize to your taste while eating together.",
+          ingredientsEn: [
+            "Tortillas 6",
+            "Ground beef 250g",
+            "Onion 1/2, Tomato 1",
+            "Taco seasoning 1 pack",
+            "Cheddar cheese, Lettuce or cabbage",
+            "Sour cream or yogurt",
+          ],
+          stepsEn: [
+            "Stir-fry ground beef and onion, then add taco seasoning to season.",
+            "Warm tortillas slightly.",
+            "Top with meat, vegetables, and cheese, serve with sour cream, and fold.",
+          ],
+          tagsEn: ["Party", "Customizable", "Hand food"],
         },
         {
           id: "tofu-kimchi",
@@ -597,6 +1046,22 @@
             "그릇에 두부를 깔고 위에 볶은 김치를 올린다.",
           ],
           description: "밥반찬이든 안주든 10분대 클리어 가능한 속 시원한 메뉴.",
+          nameEn: "Tofu Kimchi",
+          descriptionEn:
+            "A satisfying menu that can be cleared in 10 minutes, whether as a side dish or snack.",
+          ingredientsEn: [
+            "Aged kimchi 1 cup",
+            "Tofu 1 block",
+            "Pork belly or bacon 150g",
+            "Gochugaru 1 tbsp, Soy sauce 1/2 tbsp",
+            "Sugar 1/2 tbsp, Sesame oil a bit",
+          ],
+          stepsEn: [
+            "Heat tofu in microwave or boiling water to remove moisture.",
+            "Stir-fry meat in pan, add kimchi and seasonings, then stir-fry together.",
+            "Place tofu on plate and top with stir-fried kimchi.",
+          ],
+          tagsEn: ["Protein", "Snack", "Quick"],
         },
         {
           id: "chicken-salad",
@@ -621,6 +1086,22 @@
             "올리브유와 발사믹, 소금 후추로 간단히 드레싱 후 버무린다.",
           ],
           description: "배는 채우되 속은 가볍게, 10분 만에 끝내는 건강식.",
+          nameEn: "Smoked Chicken Salad",
+          descriptionEn:
+            "Fill your stomach lightly - a healthy meal finished in 10 minutes.",
+          ingredientsEn: [
+            "Smoked chicken 150g",
+            "Mixed greens 1 pack",
+            "Cherry tomatoes 5-6",
+            "Olive oil 1 tbsp, Balsamic 1 tbsp",
+            "Salt, Pepper",
+          ],
+          stepsEn: [
+            "Tear smoked chicken into bite-sized pieces.",
+            "Place greens and tomatoes in bowl.",
+            "Make simple dressing with olive oil, balsamic, salt, and pepper, then toss.",
+          ],
+          tagsEn: ["Diet", "Protein", "One-dressing"],
         },
       ];
 
@@ -770,7 +1251,11 @@
           difficulty: "하",
           tags: ["초간단", "한그릇"],
           ingredients: ["참치캔", "마요네즈", "밥"],
-          steps: ["참치의 기름을 제거한다.", "마요네즈와 섞는다.", "밥 위에 올린다."],
+          steps: [
+            "참치의 기름을 제거한다.",
+            "마요네즈와 섞는다.",
+            "밥 위에 올린다.",
+          ],
           description: "요리하기 싫은 날의 정답.",
         },
         {
@@ -814,7 +1299,11 @@
           difficulty: "하",
           tags: ["양식", "간단"],
           ingredients: ["파스타면", "마늘", "올리브유"],
-          steps: ["면을 삶는다.", "마늘을 볶아 오일을 만든다.", "면을 넣어 섞는다."],
+          steps: [
+            "면을 삶는다.",
+            "마늘을 볶아 오일을 만든다.",
+            "면을 넣어 섞는다.",
+          ],
           description: "재료 적고 실패 없는 파스타.",
         },
         {
@@ -1149,7 +1638,10 @@
           difficulty: "하",
           tags: ["시원", "한그릇"],
           ingredients: ["소면", "냉국물"],
-          steps: ["면을 삶아 찬물에 헹군다.", "그릇에 담고 차가운 국물을 붓는다."],
+          steps: [
+            "면을 삶아 찬물에 헹군다.",
+            "그릇에 담고 차가운 국물을 붓는다.",
+          ],
           description: "여름에 특히 잘 어울리는 메뉴.",
         },
         {
@@ -1239,7 +1731,11 @@
           difficulty: "중",
           tags: ["양식", "부드러움"],
           ingredients: ["파스타면", "생크림", "마늘"],
-          steps: ["면을 소금물에 삶는다.", "마늘을 볶아 향을 낸다.", "생크림과 면을 넣고 섞는다."],
+          steps: [
+            "면을 소금물에 삶는다.",
+            "마늘을 볶아 향을 낸다.",
+            "생크림과 면을 넣고 섞는다.",
+          ],
           description: "부드러운 맛의 기본 크림 파스타.",
         },
         {
@@ -1249,11 +1745,7 @@
           difficulty: "하",
           tags: ["반찬", "담백"],
           ingredients: ["콩나물", "소금", "참기름"],
-          steps: [
-            "콩나물을 데친다.",
-            "찬물에 헹군다.",
-            "양념에 무친다.",
-          ],
+          steps: ["콩나물을 데친다.", "찬물에 헹군다.", "양념에 무친다."],
           description: "집밥 기본 반찬.",
         },
         {
@@ -1371,11 +1863,7 @@
           difficulty: "하",
           tags: ["국물", "담백"],
           ingredients: ["떡국떡", "육수"],
-          steps: [
-            "육수를 끓인다.",
-            "떡을 넣고 익힌다.",
-            "간을 맞춰 완성한다.",
-          ],
+          steps: ["육수를 끓인다.", "떡을 넣고 익힌다.", "간을 맞춰 완성한다."],
           description: "간단하게 끓이는 한 그릇 국.",
         },
         {
@@ -1456,16 +1944,21 @@
 
           const mood = new Set();
           if (tagSet.has("매콤") || tagSet.has("얼큰")) mood.add("stress");
-          if (tagSet.has("간단") || (typeof r.time === "number" && r.time <= 15))
+          if (
+            tagSet.has("간단") ||
+            (typeof r.time === "number" && r.time <= 15)
+          )
             mood.add("meh");
           if (tagSet.has("집밥") || tagSet.has("든든")) mood.add("happy");
-          if (!mood.size) ["happy", "meh", "stress"].forEach((m) => mood.add(m));
+          if (!mood.size)
+            ["happy", "meh", "stress"].forEach((m) => mood.add(m));
 
           const situation = new Set();
           if (tagSet.has("한그릇") || tagSet.has("간단")) situation.add("solo");
           if (tagSet.has("집밥") || tagSet.has("푸짐") || tagSet.has("국물"))
             situation.add("together");
-          if (!situation.size) ["solo", "together"].forEach((s) => situation.add(s));
+          if (!situation.size)
+            ["solo", "together"].forEach((s) => situation.add(s));
 
           return {
             ...r,
@@ -1532,17 +2025,37 @@
       const PIXABAY_KEY = "53710884-8cf25255c451e1da9731736f6";
 
       function setLoadingState() {
-        stepNumberEl.textContent = `STEP ${stepIndex + 1} / ${stepsData.length}`;
-        questionEl.textContent = "레시피 불러오는 중...";
-        questionSubEl.textContent = "잠시만 기다려주세요.";
+        const stepsData = getStepsData();
+        stepNumberEl.textContent = t("stepFormat", {
+          current: stepIndex + 1,
+          total: stepsData.length,
+        });
+        questionEl.textContent = t("loadingRecipe");
+        questionSubEl.textContent = t("loadingWait");
         choicesEl.innerHTML = "";
       }
 
       function renderStep() {
+        if (
+          typeof stepIndex === "undefined" ||
+          !questionEl ||
+          !questionSubEl ||
+          !stepNumberEl ||
+          !choicesEl
+        ) {
+          console.warn("renderStep: DOM elements or stepIndex not ready");
+          return;
+        }
+        const stepsData = getStepsData();
+        if (!stepsData || stepIndex >= stepsData.length) {
+          console.warn("renderStep: Invalid stepIndex or stepsData");
+          return;
+        }
         const s = stepsData[stepIndex];
-        stepNumberEl.textContent = `STEP ${stepIndex + 1} / ${
-          stepsData.length
-        }`;
+        stepNumberEl.textContent = t("stepFormat", {
+          current: stepIndex + 1,
+          total: stepsData.length,
+        });
         questionEl.textContent = s.q;
         questionSubEl.textContent = s.sub;
         choicesEl.innerHTML = "";
@@ -1560,6 +2073,7 @@
       function nextStep(key, value) {
         answers[key] = value;
         stepIndex += 1;
+        const stepsData = getStepsData();
         if (stepIndex < stepsData.length) {
           renderStep();
         } else {
@@ -1624,41 +2138,81 @@
         stepCard.classList.add("hidden");
         resultCard.classList.remove("hidden");
 
-        foodEl.textContent = currentRecipe.name;
-        badgeEl.textContent = `${currentRecipe.time}분 · ${currentRecipe.difficulty}`;
-        commentEl.textContent = currentRecipe.description;
-        timeEl.textContent = `${currentRecipe.time}분이면 완성`;
-        difficultyEl.textContent = `체감 난이도: ${currentRecipe.difficulty}`;
-        tagsEl.textContent = currentRecipe.tags.join(", ");
+        const isEnglish = currentLang === "en";
+        const recipeName =
+          isEnglish && currentRecipe.nameEn
+            ? currentRecipe.nameEn
+            : currentRecipe.name;
+        const recipeDescription =
+          isEnglish && currentRecipe.descriptionEn
+            ? currentRecipe.descriptionEn
+            : currentRecipe.description;
+        const recipeIngredients =
+          isEnglish && currentRecipe.ingredientsEn
+            ? currentRecipe.ingredientsEn
+            : currentRecipe.ingredients;
+        const recipeSteps =
+          isEnglish && currentRecipe.stepsEn
+            ? currentRecipe.stepsEn
+            : currentRecipe.steps;
+        const recipeTags =
+          isEnglish && currentRecipe.tagsEn
+            ? currentRecipe.tagsEn
+            : currentRecipe.tags;
 
-        ingredientsEl.innerHTML = currentRecipe.ingredients
+        foodEl.textContent = recipeName;
+        const difficultyKey =
+          currentRecipe.difficulty === "하"
+            ? "difficultyEasy"
+            : currentRecipe.difficulty === "중"
+            ? "difficultyMedium"
+            : "difficultyHard";
+        const difficultyText =
+          currentLang === "en" ? t(difficultyKey) : currentRecipe.difficulty;
+        badgeEl.textContent = t("badgeFormat", {
+          time: currentRecipe.time,
+          difficulty: difficultyText,
+        });
+        commentEl.textContent = recipeDescription;
+        timeEl.textContent = t("timeFormat", { time: currentRecipe.time });
+        difficultyEl.textContent = t("difficultyFormat", {
+          difficulty: difficultyText,
+        });
+        tagsEl.textContent = recipeTags.join(", ");
+
+        ingredientsEl.innerHTML = recipeIngredients
           .map((i) => `<li>${i}</li>`)
           .join("");
 
-        stepsEl.innerHTML = currentRecipe.steps
-          .map((s) => `<li>${s}</li>`)
-          .join("");
+        stepsEl.innerHTML = recipeSteps.map((s) => `<li>${s}</li>`).join("");
 
-        statusEl.textContent =
-          "🛒 장보기 리스트 복사하면 바로 마켓에 붙여넣을 수 있어요.";
+        statusEl.textContent = t("statusCopyHint");
         loadImageForRecipe(currentRecipe);
       }
 
       function copyShoppingList() {
         if (!currentRecipe) return;
+        const isEnglish = currentLang === "en";
+        const recipeName =
+          isEnglish && currentRecipe.nameEn
+            ? currentRecipe.nameEn
+            : currentRecipe.name;
+        const recipeIngredients =
+          isEnglish && currentRecipe.ingredientsEn
+            ? currentRecipe.ingredientsEn
+            : currentRecipe.ingredients;
         const text = [
-          `[${currentRecipe.name}] 장보기 리스트`,
+          t("copyListTitle", { name: recipeName }),
           "",
-          ...currentRecipe.ingredients,
+          ...recipeIngredients,
         ].join("\n");
         navigator.clipboard
           .writeText(text)
           .then(() => {
-            statusEl.textContent = "✅ 복사 완료! 장볼 때 붙여넣기만 하면 끝.";
+            statusEl.textContent = t("statusCopySuccess");
           })
           .catch(() => {
-            statusEl.textContent =
-              "클립보드 접근이 차단되었습니다. 브라우저 설정을 확인해 주세요.";
+            statusEl.textContent = t("statusCopyFail");
           });
       }
 
@@ -1677,7 +2231,7 @@
       }
 
       async function loadImageForRecipe(recipe) {
-        setImagePlaceholder("이미지 불러오는 중...");
+        setImagePlaceholder(t("imageLoading"));
         const queryText = recipe.baseName || recipe.name;
         const url = new URL("https://pixabay.com/api/");
         url.searchParams.set("key", PIXABAY_KEY);
@@ -1685,7 +2239,7 @@
         url.searchParams.set("image_type", "photo");
         url.searchParams.set("orientation", "horizontal");
         url.searchParams.set("safesearch", "true");
-        url.searchParams.set("lang", "ko");
+        url.searchParams.set("lang", currentLang === "en" ? "en" : "ko");
         url.searchParams.set("per_page", "6");
         console.log("[image search]", queryText, url.toString());
 
@@ -1695,12 +2249,15 @@
           const data = await res.json();
           const hit = (data.hits || [])[0];
           if (hit && hit.webformatURL) {
-            showImage(hit.webformatURL, `${queryText} 이미지`);
+            showImage(
+              hit.webformatURL,
+              `${queryText} ${currentLang === "en" ? "image" : "이미지"}`
+            );
           } else {
-            setImagePlaceholder("이미지를 찾지 못했어요. 다른 메뉴로 시도해보세요.");
+            setImagePlaceholder(t("imageNotFound"));
           }
         } catch (err) {
-          setImagePlaceholder("이미지 불러오기 실패. 새로고침 후 다시 시도해주세요.");
+          setImagePlaceholder(t("imageFail"));
         }
       }
 
@@ -1709,16 +2266,17 @@
 
       loadCookRecipes();
     </script>
-  
-<ins class="adsbygoogle"
-     style="display:block; text-align:center"
-     data-ad-client="ca-pub-1204894220949193"
-     data-ad-slot="5145068706"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-    
-</body>
+
+    <ins
+      class="adsbygoogle"
+      style="display: block; text-align: center"
+      data-ad-client="ca-pub-1204894220949193"
+      data-ad-slot="5145068706"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </body>
 </html>
